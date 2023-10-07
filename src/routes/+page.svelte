@@ -49,21 +49,17 @@ const habitable_planet_parameters = {
 
 
 <div class="container h-full mx-auto flex-col justify-center items-center">
-	<div class="space-y-10 text-center flex flex-col items-center my-4">
+	<div class="space-y-10 text-center flex flex-col items-center m-4">
 		<h2 class="h2 mt-4 pt-4">Habitable Exoplanet</h2>
 		<figure>
 			<section class="img-bg" />
-            <a
-                title="IAU/L. Calçada, CC BY 4.0 &lt;https://creativecommons.org/licenses/by/4.0&gt;, via Wikimedia Commons"
-                href="https://commons.wikimedia.org/wiki/File:An_exoplanet_seen_from_its_moon_(artist%27s_impression).jpg"
+            <img
+                id="planet-image"
+                class="rounded-xl opacity-100 hover:mix-blend-plus-color-dodge"
+                width="1024"
+                alt="An exoplanet seen from its moon (artist&#039;s impression)"
+                src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/An_exoplanet_seen_from_its_moon_%28artist%27s_impression%29.jpg/512px-An_exoplanet_seen_from_its_moon_%28artist%27s_impression%29.jpg"
             >
-                <img
-                    class="rounded-2xl opacity-100 hover:mix-blend-plus-lighter"
-                    width="512"
-                    alt="An exoplanet seen from its moon (artist&#039;s impression)"
-                    src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/An_exoplanet_seen_from_its_moon_%28artist%27s_impression%29.jpg/512px-An_exoplanet_seen_from_its_moon_%28artist%27s_impression%29.jpg"
-                >
-            </a>
             <div class="mt-2 text-sm text-gray-300">
                 <a href="https://commons.wikimedia.org/wiki/File:An_exoplanet_seen_from_its_moon_(artist%27s_impression).jpg">IAU/L. Calçada</a>, <a href="https://creativecommons.org/licenses/by/4.0">CC BY 4.0</a>, via Wikimedia Commons
             </div>
@@ -72,11 +68,11 @@ const habitable_planet_parameters = {
 
     <hr class="my-5">
 
-    <div class="flex-col justify-center space-y-2">
+    <div class="flex-col justify-center space-y-2 mx-5">
             <form
                 method="POST"
             >
-            <h5 class="text-xl mb-3 mt-5">Physical Characteristics</h5>
+            <div class="text-xl font-medium mb-3 mt-8">Physical Characteristics</div>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
                 <div>
                     <label for="planet-size">Planet Size</label>
@@ -107,7 +103,7 @@ const habitable_planet_parameters = {
                     </select>
                 </div>
             </div>
-            <h5 class="text-xl mb-3 mt-5">Atmosphere</h5>
+            <div class="text-xl font-medium mb-3 mt-8">Atmosphere</div>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
                 <div>
                     <label for="planet-composition">Planet Composition</label>
@@ -149,7 +145,7 @@ const habitable_planet_parameters = {
                     </select>
                 </div>
             </div>
-            <h5 class="text-xl mb-3 mt-5">Climate</h5>
+            <div class="text-xl font-medium mb-3 mt-8">Climate</div>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
                 <div>
                     <label for="planet-temperature">Planet Temperature</label>
@@ -180,7 +176,7 @@ const habitable_planet_parameters = {
                     </select>
                 </div>
             </div>
-            <h5 class="text-xl mb-3 mt-5">Geological Factors</h5>
+            <div class="text-xl font-medium mb-3 mt-8">Geological Factors</div>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
                 <div>
                     <label for="planet-plate-tectonics">Planet Plate Tectonics</label>
@@ -211,7 +207,7 @@ const habitable_planet_parameters = {
                     </select>
                 </div>
             </div>
-            <h5 class="text-xl mb-3 mt-5">Star and Stellar Environment</h5>
+            <div class="text-xl font-medium mb-3 mt-8">Star and Stellar Environment</div>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
                 <div>
                     <label for="star-type">Star Type</label>
@@ -284,7 +280,7 @@ const habitable_planet_parameters = {
                     </select>
                 </div>
             </div>
-            <h5 class="text-xl mb-3 mt-5">Magnetosphere</h5>
+            <div class="text-xl font-medium mb-3 mt-8">Magnetosphere</div>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
                 <div>
                     <label for="magnetosphere-strength">Magnetosphere Strength</label>
@@ -301,7 +297,7 @@ const habitable_planet_parameters = {
                     </select>
                 </div>
             </div>
-            <h5 class="text-xl mb-3 mt-5">Surface Features</h5>
+            <div class="text-xl font-medium mb-3 mt-8">Surface Features</div>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
                 <div>
                     <label for="planet-topography">Planet Topography</label>
@@ -373,7 +369,7 @@ const habitable_planet_parameters = {
                     </select>
                 </div>
             </div>
-            <h5 class="text-xl mb-3 mt-5">External Factors</h5>
+            <div class="text-xl font-medium mb-3 mt-8">External Factors</div>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
                 <div>
                     <label for="planet-asteroid-and-comet-impact">Planet Asteroid and Comet Impact</label>
@@ -457,11 +453,11 @@ const habitable_planet_parameters = {
                     </select>
                 </div>
             </div>
-        <div>
+        <div class="space-y-10 text-center flex flex-col items-center m-4 py-5">
             <input
                 type="submit"
                 value="Submit"
-                class="btn btn-primary"
+                class="btn btn-primary bg-gray-700"
             >
         </div>
     </form>
@@ -475,22 +471,25 @@ const habitable_planet_parameters = {
 	}
 	figure svg,
 	.img-bg {
-		@apply w-64 h-64 md:w-80 md:h-80;
+		@apply w-full h-full opacity-75;
 	}
 	.img-bg {
-		@apply absolute z-[-1] rounded-full blur-[50px] transition-all;
-		animation: pulse 5s cubic-bezier(0, 0, 0, 0.5) infinite,
-			glow 5s linear infinite;
+		@apply absolute z-[-1] rounded-full blur-[150px] transition-all;
+		animation: pulse 5s cubic-bezier(1,.47,0,.67) infinite,
+			glow 15s cubic-bezier(.36,.82,.84,.42) infinite;
 	}
+    #planet-image:hover #planet-image:mix-blend-plus-lighter {
+        
+    }
 	@keyframes glow {
 		0% {
 			@apply bg-red-400/50;
 		}
 		33% {
-			@apply bg-yellow-100/50;
+			@apply bg-yellow-500/50;
 		}
 		66% {
-			@apply bg-green-400/50;
+			@apply bg-blue-500/50;
 		}
 		100% {
 			@apply bg-red-400/50;
@@ -501,4 +500,14 @@ const habitable_planet_parameters = {
 			transform: scale(1.5);
 		}
 	}
+
+    @keyframes fade-in {
+        0% {
+            opacity: .5;
+        }
+        100% {
+            opacity: 1;
+    }
+}
+
 </style>
