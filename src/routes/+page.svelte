@@ -1,51 +1,15 @@
 <script>
-
   const habitable_planet_parameters = {
-    "Physical Characteristics": {
-      "Size": ["Small", "Compact", "Earth-sized", "Large", "Massive"],
-      "Density": ["Low", "Below Average", "Average", "Above Average", "High"],
+    "Stellar Characteristics": {
+      "Radius": [0,10],
+      "Temperature": [0,10],
+      "Stellar Age": ["Young", "Early Main Sequence", "Middle-Aged", "Mature"],
     },
-    "Atmosphere": {
-      "Composition": [
-        "Low Oxygen",
-        "Balanced Mix",
-        "Oxygen-Rich",
-        "Gas-Rich",
-        "Unique Mix",
-      ],
-      "Pressure": ["Low", "Below Average", "Average", "Above Average", "High"],
-      "Stability": ["Stable", "Unstable"],
-    },
-    "Climate": {
+    "Planetary Characteristics": {
+      "Radius": [0,10],
+      "Mass": [0,10],
+      "Orbital Radius": [0,10],
       "Temperature": ["Cold", "Cool", "Moderate", "Warm", "Hot"],
-      "Precipitation": ["Arid", "Dry", "Moderate", "Wet", "Rainforest"],
-    },
-    "Geological Factors": {
-      "Plate Tectonics": ["Dormant", "Low", "Moderate", "Active", "Violent"],
-      "Volcanic Activity": ["Dormant", "Low", "Moderate", "Active", "Violent"],
-    },
-    "Star and Stellar Environment": {
-      "Star Type": [
-        "Red Dwarf",
-        "K-type Main Sequence",
-        "G-type Main Sequence",
-        "F-type Main Sequence",
-        "Massive Star",
-      ],
-      "Orbit Position": [
-        "Inner Habitable Zone",
-        "Closer to Star",
-        "Mid-Habitable Zone",
-        "Farther from Star",
-        "Outer Habitable Zone",
-      ],
-      "Stellar Age": [
-        "Young",
-        "Early Main Sequence",
-        "Middle-Aged",
-        "Mature",
-        "Old",
-      ],
       "Planetary Age": [
         "Young",
         "Early Geological Activity",
@@ -53,19 +17,32 @@
         "Old Geological Activity",
         "Ancient",
       ],
-      "Stellar Radiation": [
-        "Low Radiation",
-        "Mild Radiation",
-        "Moderate Radiation",
-        "High Radiation",
-        "Intense Radiation",
-      ],
     },
-    "Magnetosphere": {
-      "Strength": ["Weak", "Low", "Moderate", "Strong", "Very Strong"],
+    Atmosphere: {
+      Composition: [
+        "Low Oxygen",
+        "Balanced Mix",
+        "Oxygen-Rich",
+        "Gas-Rich",
+        "Unique Mix",
+      ],
+      Pressure: ["Low", "Below Average", "Average", "Above Average", "High"],
+      Stability: ["Stable", "Unstable"],
+    },
+    Climate: {
+      Temperature: ["Cold", "Cool", "Moderate", "Warm", "Hot"],
+      Precipitation: ["Arid", "Dry", "Moderate", "Wet", "Rainforest"],
+    },
+    "Geological Factors": {
+      "Plate Tectonics": ["Dormant", "Low", "Moderate", "Active", "Violent"],
+      "Volcanic Activity": ["Dormant", "Low", "Moderate", "Active", "Violent"],
+    },
+
+    Magnetosphere: {
+      Strength: ["Weak", "Low", "Moderate", "Strong", "Very Strong"],
     },
     "Surface Features": {
-      "Topography": [
+      Topography: [
         "Flat",
         "Gentle Slopes",
         "Varied Terrain",
@@ -103,7 +80,7 @@
         "Infrequent Impacts",
         "Negligible Impacts",
       ],
-      "Radiation": ["Low", "Moderate", "High"],
+      Radiation: ["Low", "Moderate", "High"],
       "Day-Night Cycle": [
         "Short Day-Long Night",
         "Balanced Day-Night Cycle",
@@ -139,20 +116,27 @@
   let selectedParameters = {};
 
   // Initialize the selectedParameters object with default values
-  Object.keys(habitable_planet_parameters).forEach(category => {
+  Object.keys(habitable_planet_parameters).forEach((category) => {
     selectedParameters[category] = {};
-    Object.keys(habitable_planet_parameters[category]).forEach(parameter => {
-      selectedParameters[category][parameter] = habitable_planet_parameters[category][parameter][0];
+    Object.keys(habitable_planet_parameters[category]).forEach((parameter) => {
+      selectedParameters[category][parameter] =
+        habitable_planet_parameters[category][parameter][0];
     });
   });
 
-function randomize() {
-    Object.keys(habitable_planet_parameters).forEach(category => {
-    Object.keys(habitable_planet_parameters[category]).forEach(parameter => {
-        const random = Math.floor(Math.random() * habitable_planet_parameters[category][parameter].length);
-        selectedParameters[category][parameter] = habitable_planet_parameters[category][parameter][random];
+  function randomize() {
+    Object.keys(habitable_planet_parameters).forEach((category) => {
+      Object.keys(habitable_planet_parameters[category]).forEach(
+        (parameter) => {
+          const random = Math.floor(
+            Math.random() *
+              habitable_planet_parameters[category][parameter].length
+          );
+          selectedParameters[category][parameter] =
+            habitable_planet_parameters[category][parameter][random];
+        }
+      );
     });
-  });
   }
 </script>
 
@@ -182,7 +166,7 @@ function randomize() {
 
   <div class="flex-col justify-center space-y-2 mx-5">
     <form method="POST">
-
+      <input type="range" name="" id="" />
       {#each Object.entries(habitable_planet_parameters) as [category, parameters]}
         <div class="text-xl font-medium mb-3 mt-8">{category}</div>
         <div
@@ -191,11 +175,18 @@ function randomize() {
           {#each Object.entries(parameters) as [parameter, values]}
             <div>
               <label for={parameter}>{parameter}</label>
-              <select bind:value={selectedParameters[category][parameter]} class="select">
-                {#each values as value}
-                  <option value={value}>{value}</option>
-                {/each}
-              </select>
+              {#if typeof values[0] === "number"}
+                <input type="range" bind:value={selectedParameters[category][parameter]} min={values[0]} max={values[1]}>
+              {:else}
+                <select
+                  bind:value={selectedParameters[category][parameter]}
+                  class="select"
+                >
+                  {#each values as value}
+                    <option {value}>{value}</option>
+                  {/each}
+                </select>
+              {/if}
             </div>
           {/each}
         </div>
