@@ -75,7 +75,22 @@ Output format:
   return JSON.parse(chatCompletion.choices[0].message.content)
 }
 
-
+async function generateImages(prompts:{[index:string]:string}){
+  console.log(prompts)
+  let spaceViewGeneration = await openai.images.generate({
+    prompt: prompts["spaceViewPrompt"],
+    size: "512x512",
+    n:1
+  })
+  let groundViewGeneration = await openai.images.generate({
+    prompt: prompts["groundViewPrompt"],
+    size: "512x512",
+    n: 1
+  })
+  console.log(spaceViewGeneration)
+  console.log(groundViewGeneration)
+  return {spaceViewUrl: spaceViewGeneration["data"][0]["url"],groundViewUrl: groundViewGeneration["data"][0]["url"]}
+}
 export const load: PageServerLoad = async (data:any) => {
   // const id = cookies.get("userid");
   //
@@ -85,8 +100,8 @@ export const load: PageServerLoad = async (data:any) => {
 
   let essay = await getEssay(data);
   let prompts = await getDallEPrompts(essay);
-
-  return {essay:essay, prompts:prompts};
+  let imageURLs = await generateImages(prompts)
+  return {essay:essay, prompts:prompts, images:imageURLs};
 };
 
 export const actions = {

@@ -1,24 +1,34 @@
 <script lang="ts">
-  import Slider from "$lib/components/Slider.svelte";
-  import { surafaceGravity } from "$lib/ts/computations";
   import type { PageServerLoad } from "./$types";
 
   export let data: PageServerLoad;
-  let description: string = "description";
 </script>
 
 <div class="container h-full mx-auto flex-col justify-center items-center">
   <div class="space-y-10 text-center flex flex-col items-center m-4">
-    <h2 class="h2 mt-4 pt-4">Habitable Exoplanet</h2>
+    <h2 class="h2 mt-4 pt-4">ExoCreator: Unveiling Worlds Beyond</h2>
     <figure>
-      <section class="img-bg" />
-      <img
-        id="planet-image"
-        class="rounded-xl opacity-100 mix-blend-hard-light"
-        width="1024"
-        alt="An exoplanet seen from its moon (artist&#039;s impression)"
-        src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/An_exoplanet_seen_from_its_moon_%28artist%27s_impression%29.jpg/512px-An_exoplanet_seen_from_its_moon_%28artist%27s_impression%29.jpg"
-      />
+      <section class="img-bg mix-blend-hard-light" />
+      <div class="grid grid-cols-2 md:grid-cols-2 gap-4">
+        <div>
+          <img
+            id="planet-image"
+            class="h-auto max-w-full rounded-lg"
+        
+            alt="The Exoplanet seen from space"
+            src={data.images["spaceViewUrl"]}
+          />
+        </div>
+        <div>
+          <img
+            id="planet-image"
+            class="h-auto max-w-full rounded-lg"
+        
+            alt="The Exoplanet seen from surface"
+            src={data.images["groundViewUrl"]}
+          />
+        </div>
+      </div>
     </figure>
     <!-- <p class="text-dark mt-4">{description}</p> -->
     <h2>About the planet</h2>

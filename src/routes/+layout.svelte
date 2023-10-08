@@ -30,11 +30,11 @@
 				<!-- > -->
 				<!-- 	Twitter -->
 				<!-- </a> -->
-				<button
+				<a href="https://www.spaceappschallenge.org/2023/find-a-team/siriusly-lost-in-space/"
 					class="btn btn-sm variant-ghost-surface"
 				>
 					About
-				</button>
+				</a>
 			</svelte:fragment>
 		</AppBar>
 	</svelte:fragment>

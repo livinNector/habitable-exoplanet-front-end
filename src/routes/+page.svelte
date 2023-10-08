@@ -167,7 +167,7 @@
 
 <div class="container h-full mx-auto flex-col justify-center items-center">
   <div class="space-y-10 text-center flex flex-col items-center m-4">
-    <h2 class="h2 mt-4 pt-4">Habitable Exoplanet</h2>
+    <h2 class="h2 mt-4 pt-4">ExoCreator: Unveiling Worlds Beyond</h2>
     <figure>
       <section class="img-bg" />
       <img
