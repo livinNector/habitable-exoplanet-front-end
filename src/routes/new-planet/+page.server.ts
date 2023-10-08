@@ -9,9 +9,9 @@ const openai = new OpenAI({
 
 
 // rename it to something more meaningful
-async function getDescription(data:any) {
+async function getEssay(data:any) {
 
-  const chatCompletion = await openai.chat.completions.create({
+  let chatCompletion = await openai.chat.completions.create({
     messages: [
       {
         role: "system",
@@ -40,8 +40,41 @@ Write an essay of 800 words in html format (only the snippet not the boilerplate
     model: "gpt-4",
   });
 
-  return chatCompletion.choices[0].message
+  return chatCompletion.choices[0].message.content
 }
+
+async function getDallEPrompts(essay: any) {
+
+  let chatCompletion = await openai.chat.completions.create({
+    messages: [
+      {
+        role: "system",
+        content: `
+  You are a DALL-E Prompt engineer.
+For the given essay about a planet.
+create the required prompts.
+  `
+      },
+      {
+        role: "user", content: `
+Essay:
+${essay}
+---
+1. Generate a short, visually descriptive prompt for DALL-E to create an image of a planet viewed from space, using commas to separate descriptive terms."
+2. Generate a short, visually descriptive prompt for DALL-E to create an image of a planet's surface viewed from the ground, using commas to separate descriptive terms."
+
+Output format:
+{
+  "spaceViewPrompt":<space view prompt>,
+  "groundViewPrompt":<ground view prompt>
+}
+` }],
+    model: "gpt-4",
+  });
+
+  return JSON.parse(chatCompletion.choices[0].message.content)
+}
+
 
 export const load: PageServerLoad = async (data:any) => {
   // const id = cookies.get("userid");
@@ -50,9 +83,10 @@ export const load: PageServerLoad = async (data:any) => {
   //   cookies.set("userid", crypto.randomUUID(), { path: "/" });
   // }
 
-  let some_data = await getDescription(data);
+  let essay = await getEssay(data);
+  let prompts = await getDallEPrompts(essay);
 
-  return some_data;
+  return {essay:essay, prompts:prompts};
 };
 
 export const actions = {

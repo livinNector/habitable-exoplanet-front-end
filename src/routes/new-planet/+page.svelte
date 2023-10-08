@@ -1,10 +1,10 @@
 <script lang="ts">
   import Slider from "$lib/components/Slider.svelte";
   import { surafaceGravity } from "$lib/ts/computations";
+  import type { PageServerLoad } from "./$types";
 
   export let data: PageServerLoad;
   let description: string = "description";
-
 </script>
 
 <div class="container h-full mx-auto flex-col justify-center items-center">
@@ -21,8 +21,13 @@
       />
     </figure>
     <!-- <p class="text-dark mt-4">{description}</p> -->
-    {@html data.content}
-    
+    <h2>About the planet</h2>
+    {@html data.essay}
+    <h2>Prompts to create space view image and ground view image</h2>
+    <h3>Space View Prompt</h3>
+    {data.prompts["spaceViewPrompt"]}
+    <h3>Ground View Prompt</h3>
+    {data.prompts["groundViewPrompt"]}
   </div>
 </div>
 
@@ -30,7 +35,7 @@
   figure {
     @apply flex relative flex-col;
   }
- 
+
   .img-bg {
     @apply w-full h-full opacity-75;
   }
