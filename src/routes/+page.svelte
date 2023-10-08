@@ -227,7 +227,7 @@
   figure {
     @apply flex relative flex-col;
   }
-  figure svg,
+ 
   .img-bg {
     @apply w-full h-full opacity-75;
   }

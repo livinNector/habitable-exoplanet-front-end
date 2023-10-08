@@ -2,7 +2,6 @@
     export let value: number;
     export let min: number;
     export let max: number;
-    export let category: Record<string, string>;
     export let unit: string = "";
 </script>
 
