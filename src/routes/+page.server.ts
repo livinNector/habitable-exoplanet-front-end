@@ -1,6 +1,8 @@
 import { OPENAI_API_KEY } from "$env/static/private";
 import type { PageServerLoad } from "./$types";
 
+let receivedFormData = {};
+
 // rename it to something more meaningful
 async function getDescription(data) {
   //   {
@@ -126,12 +128,13 @@ export const load: PageServerLoad = async () => {
 
   let some_data = await getDescription({});
 
-  return { some_data };
+  return { some_data, receivedFormData };
 };
 
 export const actions = {
   default: async ({ cookies, request }) => {
     const data = Object.fromEntries(await request.formData());
+    receivedFormData = data;
     console.log(data);
   },
   // POST: async ({ cookies, request }) => {

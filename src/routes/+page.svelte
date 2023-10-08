@@ -2,6 +2,8 @@
   import Slider from "$lib/components/Slider.svelte";
   import { surafaceGravity } from "$lib/ts/computations";
 
+  export let data: PageServerLoad;
+
   const habitable_planet_parameters: {
     [index: string]: { [index: string]: any[] };
   } = {
@@ -205,6 +207,7 @@
       </div>
     </form>
     <!-- {JSON.stringify(selectedParameters)} -->
+    {JSON.stringify(data)}
   </div>
 </div>
 
