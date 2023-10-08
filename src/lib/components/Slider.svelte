@@ -1,8 +1,9 @@
 <script lang="ts">
-    export let value: number;
-    export let min: number;
-    export let max: number;
-    export let unit: string = "";
+    export let value: any;
+    export let min: any;
+    export let max: any;
+    // export let category: Record<string, string>;
+    export let unit: any = "";
 </script>
 
 

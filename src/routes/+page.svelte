@@ -1,22 +1,20 @@
 <script lang="ts">
-    import Slider from "$lib/components/Slider.svelte";
-	import type { PageData } from './$types';
+  import Slider from "$lib/components/Slider.svelte";
+  import { surafaceGravity } from "$lib/ts/starClassify";
 
-    // this contains the data for the page
-	export let data: PageData;
-    console.log(data);
-
-  const habitable_planet_parameters = {
+  const habitable_planet_parameters: {
+    [index: string]: { [index: string]: any[] };
+  } = {
     "Stellar Characteristics": {
-      "Radius": [0,10],
-      "Temperature": [0,10],
-      "Stellar Age": ["Young", "Early Main Sequence", "Middle-Aged", "Mature"],
+      "Radius (Solar Radii)": [ 0.1, 100, "R☉"],
+      "Temperature (Kelvin)": [ 600.0, 40000.0, "K"],
     },
     "Planetary Characteristics": {
-      "Radius": [0,10],
-      "Mass": [0,10],
-      "Orbital Radius": [0,10],
-      "Temperature": ["Cold", "Cool", "Moderate", "Warm", "Hot"],
+      "Radius (Jupiter Radii)": [ 0.01, 3.0, "Rj"],
+      "Mass (Jupiter Mass)": [ 1e-05, 300.0, "Mj"],
+      "Orbital Radius": [ 0, 10, "AU"],
+      "Albedo (Fraction of light reflected)": [ 0, 1],
+      Temperature: ["Cold", "Cool", "Moderate", "Warm", "Hot"],
       "Planetary Age": [
         "Young",
         "Early Geological Activity",
@@ -24,27 +22,13 @@
         "Old Geological Activity",
         "Ancient",
       ],
-    },
-    Atmosphere: {
-      Composition: [
-        "Low Oxygen",
-        "Balanced Mix",
-        "Oxygen-Rich",
-        "Gas-Rich",
-        "Unique Mix",
+      "Day-Night Cycle": [
+        "Short Day-Long Night",
+        "Balanced Day-Night Cycle",
+        "Long Day-Short Night",
+        "Irregular or No Cycle",
       ],
-      Pressure: ["Low", "Below Average", "Average", "Above Average", "High"],
-      Stability: ["Stable", "Unstable"],
     },
-    Climate: {
-      Temperature: ["Cold", "Cool", "Moderate", "Warm", "Hot"],
-      Precipitation: ["Arid", "Dry", "Moderate", "Wet", "Rainforest"],
-    },
-    "Geological Factors": {
-      "Plate Tectonics": ["Dormant", "Low", "Moderate", "Active", "Violent"],
-      "Volcanic Activity": ["Dormant", "Low", "Moderate", "Active", "Violent"],
-    },
-
     Magnetosphere: {
       Strength: ["Weak", "Low", "Moderate", "Strong", "Very Strong"],
     },
@@ -87,60 +71,56 @@
         "Infrequent Impacts",
         "Negligible Impacts",
       ],
-      Radiation: ["Low", "Moderate", "High"],
-      "Day-Night Cycle": [
-        "Short Day-Long Night",
-        "Balanced Day-Night Cycle",
-        "Long Day-Short Night",
-        "Irregular or No Cycle",
-      ],
-      "Wind Patterns": [
-        "Calm",
-        "Light Breezes",
-        "Moderate Winds",
-        "Strong Winds",
-        "Violent Storms",
-      ],
     },
-    "Climate Stability and Ecosystem": {
-      "Climate Stability": [
-        "Unpredictable",
-        "Variable",
-        "Stable",
-        "Extremely Stable",
-        "Perfectly Stable",
+    Atmosphere: {
+      Composition: [
+        "Low Oxygen",
+        "Balanced Mix",
+        "Oxygen-Rich",
+        "Gas-Rich",
+        "Unique Mix",
       ],
-      "Ecosystem Balance": [
-        "Unbalanced",
-        "Tenuous Balance",
-        "Balanced",
-        "Robust Balance",
-        "Perfect Balance",
-      ],
+      Pressure: ["Low", "Below Average", "Average", "Above Average", "High"],
+      Stability: ["Stable", "Unstable"],
+    },
+    Climate: {
+      Temperature: ["Cold", "Cool", "Moderate", "Warm", "Hot"],
+      Precipitation: ["Arid", "Dry", "Moderate", "Wet", "Rainforest"],
     },
   };
 
-  let selectedParameters = {};
+  let selectedParameters: { [index: string]: { [index: string]: any } } = {};
 
   // Initialize the selectedParameters object with default values
   Object.keys(habitable_planet_parameters).forEach((category) => {
     selectedParameters[category] = {};
-    Object.keys(habitable_planet_parameters[category]).forEach((parameter) => {
-      selectedParameters[category][parameter] =
-        habitable_planet_parameters[category][parameter][0];
+    Object.keys(habitable_planet_parameters[category]).forEach((parameter:string)=>{
+        selectedParameters[category][parameter] =
+          habitable_planet_parameters[category][parameter][0];
     });
   });
-
+  let plChar = selectedParameters["Planetary Characteristics"];
+  $: {
+    plChar["surfaceGravity"] = surafaceGravity(
+      plChar["Mass"],
+      plChar["Radius"]
+    );
+    selectedParameters = selectedParameters;
+  }
+  // $ :surGrav = selectedParameters["Planetary Characteristics"]["Mass"]
   function randomize() {
     Object.keys(habitable_planet_parameters).forEach((category) => {
       Object.keys(habitable_planet_parameters[category]).forEach(
         (parameter) => {
-          const random = Math.floor(
-            Math.random() *
-              habitable_planet_parameters[category][parameter].length
-          );
-          selectedParameters[category][parameter] =
-            habitable_planet_parameters[category][parameter][random];
+          let param = habitable_planet_parameters[category][parameter] ;
+          if (typeof param[0] ==="number"){
+            let random = param[0]+Math.floor(Math.random() * (param[1]-param[0]));
+            selectedParameters[category][parameter] = random;
+          }
+          else{
+            let random = Math.floor(Math.random() *param.length);
+            selectedParameters[category][parameter] = param[random];
+          }
         }
       );
     });
@@ -181,11 +161,12 @@
           {#each Object.entries(parameters) as [parameter, values]}
             <div>
               <label for={parameter}>{parameter}</label>
-              {#if typeof values[0] === "number"}
+              {#if typeof values[0]==="number"}
                 <Slider
-                  value={selectedParameters[category][parameter]}
-                    min={values[0]}
-                    max={values[1]}
+                  bind:value={selectedParameters[category][parameter]}
+                  min={values[0]}
+                  max={values[1]}
+                  unit={values[2]}
                 />
               {:else}
                 <select
