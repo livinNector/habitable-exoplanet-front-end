@@ -20,17 +20,9 @@
         src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/An_exoplanet_seen_from_its_moon_%28artist%27s_impression%29.jpg/512px-An_exoplanet_seen_from_its_moon_%28artist%27s_impression%29.jpg"
       />
     </figure>
-    <p class="text-dark mt-4">{data.openAiData}</p>
-    <figure>
-      <section class="img-bg" />
-      <img
-        id="planet-image"
-        class="rounded-xl opacity-100 mix-blend-hard-light"
-        width="1024"
-        alt="An exoplanet seen from its moon (artist&#039;s impression)"
-        src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/An_exoplanet_seen_from_its_moon_%28artist%27s_impression%29.jpg/512px-An_exoplanet_seen_from_its_moon_%28artist%27s_impression%29.jpg"
-      />
-    </figure>
+    <!-- <p class="text-dark mt-4">{description}</p> -->
+    {@html data.content}
+    
   </div>
 </div>
 

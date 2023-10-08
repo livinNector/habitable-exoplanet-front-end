@@ -9,9 +9,9 @@
     fromSolarRadius,
     surafaceGravity,
   } from "$lib/ts/computations";
-    import type { PageServerLoad } from "./$types";
+  //   import type { PageServerLoad } from "./$types";
 
-  export let data: PageServerLoad;
+  // export let data: PageServerLoad;
 
   const habitable_planet_parameters: {
     [index: string]: { [index: string]: any[] | string | number };
@@ -23,7 +23,7 @@
     },
     "Planetary Characteristics": {
       "Radius (Jupiter Radii)": [0.01, 3.0, "Rj"],
-      "Mass (Jupiter Mass)": [1e-5, 300.0, "Mj"],
+      "Mass (Jupiter Mass)": [1e-5, 15, "Mj"],
       "Orbital Radius": [0.1, 10, "AU"],
       "Albedo (Fraction of light reflected)": [0, 0.999],
       "Equilibrium Temperature (Kelvin)": 0,
@@ -250,7 +250,7 @@
       </div>
     </form>
     <!-- {JSON.stringify(selectedParameters)} -->
-    {JSON.stringify(data)}
+    
   </div>
 </div>
 
