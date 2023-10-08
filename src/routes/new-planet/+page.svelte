@@ -20,7 +20,7 @@
         src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/An_exoplanet_seen_from_its_moon_%28artist%27s_impression%29.jpg/512px-An_exoplanet_seen_from_its_moon_%28artist%27s_impression%29.jpg"
       />
     </figure>
-    <p class="text-dark mt-4">{description}</p>
+    <p class="text-dark mt-4">{data.openAiData}</p>
     <figure>
       <section class="img-bg" />
       <img
