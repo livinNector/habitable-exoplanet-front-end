@@ -125,6 +125,7 @@
       );
     });
   }
+
 </script>
 
 <div class="container h-full mx-auto flex-col justify-center items-center">
@@ -152,6 +153,7 @@
   <hr class="my-5" />
 
   <div class="flex-col justify-center space-y-2 mx-5">
+    <!-- <form method="POST" on:submit|preventDefault={sendData}> -->
     <form method="POST">
       {#each Object.entries(habitable_planet_parameters) as [category, parameters]}
         <div class="text-xl font-medium mb-3 mt-8">{category}</div>
@@ -163,6 +165,7 @@
               <label for={parameter}>{parameter}</label>
               {#if typeof values[0]==="number"}
                 <Slider
+                  name={parameter.toLowerCase().replaceAll(' ', '-')}
                   bind:value={selectedParameters[category][parameter]}
                   min={values[0]}
                   max={values[1]}
@@ -171,6 +174,7 @@
               {:else}
                 <select
                   bind:value={selectedParameters[category][parameter]}
+                  name={parameter.toLowerCase().replaceAll(' ', '-')}
                   class="select"
                 >
                   {#each values as value}

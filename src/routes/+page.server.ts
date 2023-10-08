@@ -22,6 +22,11 @@ export const load: PageServerLoad = async () => {
 export const actions = {
   default: async ({ cookies, request }) => {
     const data = await request.formData();
-    console.log(data);
+    console.log(data.get("radius-(solar-radii)"));
   },
+  // POST: async ({ cookies, request }) => {
+  //   const data = await request.formData();
+  //   console.log(data);
+  //   return "OK";
+  // },
 };
