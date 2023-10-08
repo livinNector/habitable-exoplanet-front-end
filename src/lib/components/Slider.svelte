@@ -3,6 +3,11 @@
     export let min: number;
     export let max: number;
     export let category: Record<string, string>;
+    export let unit: string = "";
 </script>
 
-<input type="range" bind:value={value} min={min} max={max} />
+
+<div>
+    <div class="flex justify-end">{value} {unit}</div>
+    <input type="range" bind:value={value} min={min} max={max} />
+</div>

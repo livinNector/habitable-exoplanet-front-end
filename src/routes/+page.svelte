@@ -168,7 +168,6 @@
 
   <div class="flex-col justify-center space-y-2 mx-5">
     <form method="POST">
-      <input type="range" name="" id="" />
       {#each Object.entries(habitable_planet_parameters) as [category, parameters]}
         <div class="text-xl font-medium mb-3 mt-8">{category}</div>
         <div
@@ -178,11 +177,10 @@
             <div>
               <label for={parameter}>{parameter}</label>
               {#if typeof values[0] === "number"}
-                <!-- <input type="range" bind:value={selectedParameters[category][parameter]} min={values[0]} max={values[1]}> -->
                 <Slider
                   value={selectedParameters[category][parameter]}
-                min={values[0]}
-                max={values[1]}
+                    min={values[0]}
+                    max={values[1]}
                 />
               {:else}
                 <select
