@@ -191,7 +191,7 @@
 
   <div class="flex-col justify-center space-y-2 mx-5">
     <!-- <form method="POST" on:submit|preventDefault={sendData}> -->
-    <form method="POST">
+    <form method="POST" action="/new-planet">
       {#each Object.entries(habitable_planet_parameters) as [category, parameters]}
         <div class="text-xl font-medium mb-3 mt-8">{category}</div>
         <div

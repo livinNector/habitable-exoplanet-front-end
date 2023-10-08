@@ -135,7 +135,7 @@ export const actions = {
   default: async ({ cookies, request }) => {
     const data = Object.fromEntries(await request.formData());
     receivedFormData = data;
-    console.log(data);
+    // console.log(data);
   },
   // POST: async ({ cookies, request }) => {
   //   const data = await request.formData();
