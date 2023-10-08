@@ -1,134 +1,61 @@
 import { OPENAI_API_KEY } from "$env/static/private";
 import type { PageServerLoad } from "./$types";
 
+import OpenAI from "openai";
+
+const openai = new OpenAI({
+  apiKey: OPENAI_API_KEY,
+});
+
+
+
 let receivedFormData = {};
 
 // rename it to something more meaningful
-async function getDescription(data) {
-  //   {
-  //   "Stellar Characteristics": {
-  //     "Radius (Solar Radii)": [ 0.1, 100, "R☉"],
-  //     "Temperature (Kelvin)": [ 600.0, 40000.0, "K"],
-  //   },
-  //   "Planetary Characteristics": {
-  //     "Radius (Jupiter Radii)": [ 0.01, 3.0, "Rj"],
-  //     "Mass (Jupiter Mass)": [ 1e-05, 300.0, "Mj"],
-  //     "Orbital Radius": [ 0, 10, "AU"],
-  //     "Albedo (Fraction of light reflected)": [ 0, 1],
-  //     Temperature: ["Cold", "Cool", "Moderate", "Warm", "Hot"],
-  //     "Planetary Age": [
-  //       "Young",
-  //       "Early Geological Activity",
-  //       "Mature Geological Activity",
-  //       "Old Geological Activity",
-  //       "Ancient",
-  //     ],
-  //     "Day-Night Cycle": [
-  //       "Short Day-Long Night",
-  //       "Balanced Day-Night Cycle",
-  //       "Long Day-Short Night",
-  //       "Irregular or No Cycle",
-  //     ],
-  //   },
-  //   Magnetosphere: {
-  //     Strength: ["Weak", "Low", "Moderate", "Strong", "Very Strong"],
-  //   },
-  //   "Surface Features": {
-  //     Topography: [
-  //       "Flat",
-  //       "Gentle Slopes",
-  //       "Varied Terrain",
-  //       "Rugged",
-  //       "Extreme Peaks and Valleys",
-  //     ],
-  //     "Ocean Depth": [
-  //       "Shallow",
-  //       "Moderate Depths",
-  //       "Deep",
-  //       "Abyssal",
-  //       "Ocean Trenches",
-  //     ],
-  //     "Soil Fertility": [
-  //       "Poor",
-  //       "Below Average",
-  //       "Moderate",
-  //       "Fertile",
-  //       "Rich",
-  //     ],
-  //     "Water Bodies": ["Arid", "Lakes and Rivers", "Seas", "Oceans"],
-  //     "Land Mass": [
-  //       "Islands",
-  //       "Small Continents",
-  //       "Large Continents",
-  //       "Archipelagos",
-  //       "Supercontinent",
-  //     ],
-  //   },
-  //   "External Factors": {
-  //     "Asteroid and Comet Impact": [
-  //       "Frequent Impacts",
-  //       "Occasional Impacts",
-  //       "Rare Impacts",
-  //       "Infrequent Impacts",
-  //       "Negligible Impacts",
-  //     ],
-  //   },
-  //   Atmosphere: {
-  //     Composition: [
-  //       "Low Oxygen",
-  //       "Balanced Mix",
-  //       "Oxygen-Rich",
-  //       "Gas-Rich",
-  //       "Unique Mix",
-  //     ],
-  //     Pressure: ["Low", "Below Average", "Average", "Above Average", "High"],
-  //     Stability: ["Stable", "Unstable"],
-  //   },
-  //   Climate: {
-  //     Temperature: ["Cold", "Cool", "Moderate", "Warm", "Hot"],
-  //     Precipitation: ["Arid", "Dry", "Moderate", "Wet", "Rainforest"],
-  //   },
-  // }
+async function getDescription(data:any) {
 
-  const prompt: string = `
-    Stellar Characteristics:
-    `;
-
-  let response = await fetch(
-    "https://api.openai.com/v1/engines/davinci/completions",
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${OPENAI_API_KEY}`,
+  const chatCompletion = await openai.chat.completions.create({
+    messages: [
+      {
+        role: "system",
+        content: `
+  You embody the skills and knowledge of a creative and innovative astronomer and writer.
+  The user will provide you with specific details about an exoplanet.
+  CAREFULLY CONSIDER EVERY PIECE OF INFORMATION THEY PROVIDE.
+  Your task is to compose an imaginative and DETAILED essay about the exoplanet.
+  Describe its characteristics, its position in its solar system, its potential history, and its notable features.
+  If, based on the details provided, you believe that life could potentially exist on this exoplanet, mention that as well.
+  `
       },
-      body: JSON.stringify({
-        prompt: "This is a test",
-        max_tokens: 5,
-        temperature: 0.5,
-        top_p: 1,
-        n: 1,
-        stream: false,
-        logprobs: null,
-        stop: ["\n"],
-      }),
-    },
-  );
-  let chatgpt_data = await response.json();
+      {
+        role: "user", content: `
+This is the data of the exoplanet
+${JSON.stringify(data)}
+---
+Consider these factors to jog your creative memory:
+Higher gravity -> Shorter life height.
+Older planet -> Higher possibility of life.
+Frequent asteroid impacts -> Less suitable for survival.
+Strong magnetosphere -> Easier access to electronics for intelligent life.
+---
+Write an essay of 500 words in html format:
+      ` }],
+    model: "gpt-4",
+  });
 
-  return "data from fetch call";
+  return chatCompletion.choices[0].message.content
 }
 
-export const load: PageServerLoad = async () => {
+export const load: PageServerLoad = async (data) => {
   // const id = cookies.get("userid");
   //
   // if (!id) {
   //   cookies.set("userid", crypto.randomUUID(), { path: "/" });
   // }
 
-  let some_data = await getDescription({});
+  let some_data = await getDescription(data);
 
-  return { some_data, receivedFormData };
+  return some_data;
 };
 
 export const actions = {
