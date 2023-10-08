@@ -1,4 +1,6 @@
 <script>
+    import Slider from "$lib/components/Slider.svelte";
+
   const habitable_planet_parameters = {
     "Stellar Characteristics": {
       "Radius": [0,10],
@@ -176,7 +178,12 @@
             <div>
               <label for={parameter}>{parameter}</label>
               {#if typeof values[0] === "number"}
-                <input type="range" bind:value={selectedParameters[category][parameter]} min={values[0]} max={values[1]}>
+                <!-- <input type="range" bind:value={selectedParameters[category][parameter]} min={values[0]} max={values[1]}> -->
+                <Slider
+                  value={selectedParameters[category][parameter]}
+                min={values[0]}
+                max={values[1]}
+                />
               {:else}
                 <select
                   bind:value={selectedParameters[category][parameter]}
