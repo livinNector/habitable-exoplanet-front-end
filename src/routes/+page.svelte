@@ -1,22 +1,34 @@
 <script lang="ts">
   import Slider from "$lib/components/Slider.svelte";
-  import { surafaceGravity } from "$lib/ts/computations";
+  import {
+    classifyStarType,
+    equilibriumTemperature,
+    esi,
+    fromAU,
+    fromJupiterRadius,
+    fromSolarRadius,
+    surafaceGravity,
+  } from "$lib/ts/computations";
+    import type { PageServerLoad } from "./$types";
 
   export let data: PageServerLoad;
 
   const habitable_planet_parameters: {
-    [index: string]: { [index: string]: any[] };
+    [index: string]: { [index: string]: any[] | string | number };
   } = {
     "Stellar Characteristics": {
-      "Radius (Solar Radii)": [ 0.1, 100, "R☉"],
-      "Temperature (Kelvin)": [ 600.0, 40000.0, "K"],
+      "Radius (Solar Radii)": [0.1, 20, "R☉"],
+      "Temperature (Kelvin)": [600.0, 40000.0, "K"],
+      "Star Type": "",
     },
     "Planetary Characteristics": {
-      "Radius (Jupiter Radii)": [ 0.01, 3.0, "Rj"],
-      "Mass (Jupiter Mass)": [ 1e-05, 300.0, "Mj"],
-      "Orbital Radius": [ 0, 10, "AU"],
-      "Albedo (Fraction of light reflected)": [ 0, 1],
-      Temperature: ["Cold", "Cool", "Moderate", "Warm", "Hot"],
+      "Radius (Jupiter Radii)": [0.01, 3.0, "Rj"],
+      "Mass (Jupiter Mass)": [1e-5, 300.0, "Mj"],
+      "Orbital Radius": [0.1, 10, "AU"],
+      "Albedo (Fraction of light reflected)": [0, 0.999],
+      "Equilibrium Temperature (Kelvin)": 0,
+      "Surface Gravity": 0,
+      "Earth Similarity Index (ESI)": 0,
       "Planetary Age": [
         "Young",
         "Early Geological Activity",
@@ -96,16 +108,37 @@
   // Initialize the selectedParameters object with default values
   Object.keys(habitable_planet_parameters).forEach((category) => {
     selectedParameters[category] = {};
-    Object.keys(habitable_planet_parameters[category]).forEach((parameter:string)=>{
-        selectedParameters[category][parameter] =
-          habitable_planet_parameters[category][parameter][0];
-    });
+    Object.keys(habitable_planet_parameters[category]).forEach(
+      (parameter: string) => {
+        let param = habitable_planet_parameters[category][parameter];
+        if (typeof param !== "number" && typeof param !== "string") {
+          selectedParameters[category][parameter] = param[0];
+        }
+      }
+    );
   });
-  let plChar = selectedParameters["Planetary Characteristics"];
   $: {
-    plChar["surfaceGravity"] = surafaceGravity(
-      plChar["Mass"],
-      plChar["Radius"]
+    let slChar = selectedParameters["Stellar Characteristics"];
+    slChar["Star Type"] = classifyStarType(
+      slChar["Temperature (Kelvin)"],
+      slChar["Radius (Solar Radii)"]
+    );
+    let plChar = selectedParameters["Planetary Characteristics"];
+    plChar["Surface Gravity"] = surafaceGravity(
+      plChar["Mass (Jupiter Mass)"],
+      plChar["Radius (Jupiter Radii)"]
+    );
+    plChar["Equilibrium Temperature (Kelvin)"] = equilibriumTemperature(
+      slChar["Temperature (Kelvin)"],
+      fromSolarRadius(slChar["Radius (Solar Radii)"]),
+      fromAU(plChar["Orbital Radius"]),
+      plChar["Albedo (Fraction of light reflected)"]
+    );
+    plChar["Earth Similarity Index (ESI)"] = esi(
+      fromSolarRadius(slChar["Radius (Solar Radii)"]),
+      slChar["Temperature (Kelvin)"],
+      fromAU(plChar["Orbital Radius"]),
+      fromJupiterRadius(plChar["Radius (Jupiter Radii)"])
     );
     selectedParameters = selectedParameters;
   }
@@ -114,14 +147,16 @@
     Object.keys(habitable_planet_parameters).forEach((category) => {
       Object.keys(habitable_planet_parameters[category]).forEach(
         (parameter) => {
-          let param = habitable_planet_parameters[category][parameter] ;
-          if (typeof param[0] ==="number"){
-            let random = param[0]+Math.floor(Math.random() * (param[1]-param[0]));
-            selectedParameters[category][parameter] = random;
-          }
-          else{
-            let random = Math.floor(Math.random() *param.length);
-            selectedParameters[category][parameter] = param[random];
+          let param = habitable_planet_parameters[category][parameter];
+          if (typeof param !== "number" && typeof param !== "string") {
+            if (typeof param[0] === "number") {
+              let random =
+                param[0] + Math.floor(Math.random() * (param[1] - param[0]));
+              selectedParameters[category][parameter] = random;
+            } else {
+              let random = Math.floor(Math.random() * param.length);
+              selectedParameters[category][parameter] = param[random];
+            }
           }
         }
       );
@@ -165,7 +200,15 @@
           {#each Object.entries(parameters) as [parameter, values]}
             <div>
               <label for={parameter}>{parameter}</label>
-              {#if typeof values[0]==="number"}
+              {#if typeof values === "number"}
+                <div class="py-3 text-xl font-medium">
+                  {selectedParameters[category][parameter] || ""}
+                </div>
+              {:else if typeof values === "string"}
+                <div class="py-3 text-xl font-medium">
+                  {selectedParameters[category][parameter] || ""}
+                </div>
+              {:else if typeof values[0] === "number"}
                 <Slider
                   name={parameter.toLowerCase().replaceAll(' ', '-')}
                   bind:value={selectedParameters[category][parameter]}
@@ -215,7 +258,7 @@
   figure {
     @apply flex relative flex-col;
   }
- 
+
   .img-bg {
     @apply w-full h-full opacity-75;
   }

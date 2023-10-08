@@ -10,11 +10,5 @@
 
 <div>
     <div class="flex justify-end">{value} {unit}</div>
-    <input
-        name={name}
-        type="range"
-        bind:value={value}
-        min={min}
-        max={max}
-    />
+    <input type="range" name={name} bind:value={value} min={min} max={max} step={(max-min)/100}/>
 </div>

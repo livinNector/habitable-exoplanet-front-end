@@ -35,38 +35,47 @@ function classifyStarType(temperature:number, radius:number) {
 }
 
 const G = 6.67430e-11;
-function surafaceGravity(M:number, R:number) :number{
-    const a = (G * M) / (R * R);
-    return a;
-}
 function toJupiterMass(m:number){
     return m/1.899e27;
 }
 function fromJupiterMass(m:number){
-    1.899e27
+    return m *1.899e27
 }
-let geological_activity_by_age = {
-    "Young": {
-        "Plate Tectonics": "Thicker lithosphere, limited tectonic activity.",
-        "Volcanic Activity": "High volcanic activity due to leftover internal heat."
-    },
-    "Early Geological Activity": {
-        "Plate Tectonics": "Thinner lithosphere, initiation of plate tectonics.",
-        "Volcanic Activity": "Gradual decrease in volcanic activity."
-    },
-    "Mature Geological Activity": {
-        "Plate Tectonics": "Complex tectonic dynamics, subduction, mountain formation.",
-        "Volcanic Activity": "Predictable volcanic activity at specific locations."
-    },
-    "Old Geological Activity": {
-        "Plate Tectonics": "Tectonic activity slows or ceases as the planet cools.",
-        "Volcanic Activity": "Volcanic activity becomes rare as the mantle cools."
-    },
-    "Ancient": {
-        "Plate Tectonics": "Limited or no active plate tectonics.",
-        "Volcanic Activity": "Limited or no volcanic activity."
-    }
+function fromJupiterRadius(r:number){
+    return r * 7.149e7
+}
+function fromSolarRadius(r:number){
+    return r*6.957e8
+}
+function surafaceGravity(M:number, R:number) :number{
+    M = fromJupiterMass(M)
+    R = fromJupiterRadius(R)
+    const a = (G * M) / (R * R);
+    return a;
+}
+function equilibriumTemperature(Ts:number,Rs:number,D:number,A:number):number{
+    return Ts * Math.sqrt(Rs/(2*D))* Math.pow((1-A),1/4)
+}
+function stellarLuminosity(R:number,T:number):number{
+    return 4*Math.PI*Math.pow(R,2)*(5.67e-8)*Math.pow(T,4)
 }
 
-export {surafaceGravity,classifyStarType};
+function stellarFlux(Rs:number,Ts:number,d:number):number{
+    return stellarLuminosity(Rs,Ts)/(4*Math.PI*Math.pow(d,2))
+}
+
+function esi(Rs:number,Ts:number,d:number ,Rp:number):number{
+    let Re = 6.378e6;
+    let SFe = 3.828e26;
+    let Sf = stellarFlux(Rs, Ts, d)
+    let term1 = ((Sf - SFe) / (Sf + SFe)) ** 2
+    let term2 = ((Rp - Re) / (Rp + Re)) ** 2
+    return 1 - Math.sqrt(0.5 * (term1 + term2))
+}
+
+function fromAU(d:number){
+    return 1.496e11 * d
+}
+
+export {surafaceGravity,classifyStarType, fromSolarRadius, fromJupiterRadius,fromAU,equilibriumTemperature, esi};
 
