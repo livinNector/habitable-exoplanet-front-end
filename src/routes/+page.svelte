@@ -1,5 +1,10 @@
-<script>
+<script lang="ts">
     import Slider from "$lib/components/Slider.svelte";
+	import type { PageData } from './$types';
+
+    // this contains the data for the page
+	export let data: PageData;
+    console.log(data);
 
   const habitable_planet_parameters = {
     "Stellar Characteristics": {
