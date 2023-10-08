@@ -1,6 +1,6 @@
 <script lang="ts">
   import Slider from "$lib/components/Slider.svelte";
-  import { surafaceGravity } from "$lib/ts/starClassify";
+  import { surafaceGravity } from "$lib/ts/computations";
 
   const habitable_planet_parameters: {
     [index: string]: { [index: string]: any[] };
